@@ -41,34 +41,36 @@ def run_AI_all(pathdir,filename,BF_try_time=60,BF_ops_file_type="14ops", polyfit
 
     # Run bf and polyfit
     PA = run_bf_polyfit(pathdir,pathdir,filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
-    PA = get_squared(pathdir,"results/mystery_world_squared/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)   
+    PA = get_squared(pathdir,pathdir+"results/mystery_world_squared/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)   
 
     # Run bf and polyfit on modified output
 
-    PA = get_acos(pathdir,"results/mystery_world_acos/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
-    PA = get_asin(pathdir,"results/mystery_world_asin/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
-    PA = get_atan(pathdir,"results/mystery_world_atan/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
-    PA = get_cos(pathdir,"results/mystery_world_cos/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
-    PA = get_exp(pathdir,"results/mystery_world_exp/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
-    PA = get_inverse(pathdir,"results/mystery_world_inverse/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
-    PA = get_log(pathdir,"results/mystery_world_log/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
-    PA = get_sin(pathdir,"results/mystery_world_sin/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
-    PA = get_sqrt(pathdir,"results/mystery_world_sqrt/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
-    PA = get_squared(pathdir,"results/mystery_world_squared/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
-    PA = get_tan(pathdir,"results/mystery_world_tan/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
+    PA = get_acos(pathdir,pathdir+"results/mystery_world_acos/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
+    PA = get_asin(pathdir,pathdir+"results/mystery_world_asin/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
+    PA = get_atan(pathdir,pathdir+"results/mystery_world_atan/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
+    PA = get_cos(pathdir,pathdir+"results/mystery_world_cos/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
+    PA = get_exp(pathdir,pathdir+"results/mystery_world_exp/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
+    PA = get_inverse(pathdir,pathdir+"results/mystery_world_inverse/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
+    PA = get_log(pathdir,pathdir+"results/mystery_world_log/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
+    PA = get_sin(pathdir,pathdir+"results/mystery_world_sin/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
+    PA = get_sqrt(pathdir,pathdir+"results/mystery_world_sqrt/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
+    PA = get_squared(pathdir,pathdir+"results/mystery_world_squared/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
+    PA = get_tan(pathdir,pathdir+"results/mystery_world_tan/",filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg)
 
 #############################################################################################################################
     # check if the NN is trained. If it is not, train it on the data.
     if len(data[0])<3:
         print("Just one variable!")
         pass
-    elif path.exists("results/NN_trained_models/models/" + filename + ".h5"):# or len(data[0])<3:
+    elif path.exists(pathdir+"results/NN_trained_models/models/" + filename + ".h5"):# or len(data[0])<3:
         print("NN already trained \n")
         print("NN loss: ", NN_eval(pathdir,filename)[0], "\n")
         model_feynman = NN_eval(pathdir,filename)[1]
-    elif path.exists("results/NN_trained_models/models/" + filename + "_pretrained.h5"):
+    elif path.exists(pathdir+"results/NN_trained_models/models/" + filename + "_pretrained.h5"):
         print("Found pretrained NN \n")
-        model_feynman = NN_train(pathdir,filename,NN_epochs/2,lrs=1e-3,N_red_lr=3,pretrained_path="results/NN_trained_models/models/" + filename + "_pretrained.h5")
+        model_feynman = NN_train(pathdir,filename,NN_epochs/2,lrs=1e-3,
+                                 N_red_lr=3,
+                                 pretrained_path=pathdir+"results/NN_trained_models/models/" + filename + "_pretrained.h5")
         print("NN loss after training: ", NN_eval(pathdir,filename), "\n")
     else:
         print("Training a NN on the data... \n")
@@ -121,8 +123,8 @@ def run_AI_all(pathdir,filename,BF_try_time=60,BF_ops_file_type="14ops", polyfit
     if succ_grad == 1:
         #try:
         for qqqq in range(1):
-            brute_force_comp("results/","gradients_comp_%s.txt" %filename,600,"14ops.txt")
-            bf_all_output = np.loadtxt("results_comp.dat", dtype="str")
+            brute_force_comp(pathdir+"results/","gradients_comp_%s.txt" %filename,600,"14ops.txt")
+            bf_all_output = np.loadtxt(pathdir+"results_comp.dat", dtype="str")
             for bf_i in range(len(bf_all_output)):
                 idx_comp_temp = 0
                 try:
@@ -152,8 +154,8 @@ def run_AI_all(pathdir,filename,BF_try_time=60,BF_ops_file_type="14ops", polyfit
         if len(data[0])>3:
             # find the best separability indices
             decomp_idx = identify_decompositions(pathdir,filename, model_feynman)
-            brute_force_gen_sym("results/","gradients_gen_sym_%s" %filename,600,"14ops.txt")
-            bf_all_output = np.loadtxt("results_gen_sym.dat", dtype="str")
+            brute_force_gen_sym(pathdir+"results/","gradients_gen_sym_%s" %filename,600,"14ops.txt")
+            bf_all_output = np.loadtxt(pathdir+"results_gen_sym.dat", dtype="str")
             
             for bf_i in range(len(bf_all_output)):
                 idx_gen_sym_temp = 0
@@ -284,15 +286,16 @@ def run_aifeynman(pathdir,filename,BF_try_time,BF_ops_file_type, polyfit_deg=4, 
     PA_list = PA.get_pareto_points()
     '''
 
-    np.savetxt("results/solution_before_snap_%s.txt" %filename,PA_list,fmt="%s")
+    np.savetxt(pathdir+"results/solution_before_snap_%s.txt" %filename,PA_list,fmt="%s")
 
+    print('post-run_AI_all filename:',filename)
 
     # Run zero, integer and rational snap on the resulted equations
     for j in range(len(PA_list)):
         PA = add_snap_expr_on_pareto(pathdir,filename,PA_list[j][-1],PA, "")
 
     PA_list = PA.get_pareto_points()
-    np.savetxt("results/solution_first_snap_%s.txt" %filename,PA_list,fmt="%s")
+    np.savetxt(pathdir+"results/solution_first_snap_%s.txt" %filename,PA_list,fmt="%s")
 
     # Run gradient descent on the data one more time
     for i in range(len(PA_list)):
@@ -327,7 +330,7 @@ def run_aifeynman(pathdir,filename,BF_try_time,BF_ops_file_type, polyfit_deg=4, 
         save_data = np.column_stack((test_errors,log_err,log_err_all,list_dt))
     else:
         save_data = np.column_stack((log_err,log_err_all,list_dt))
-    np.savetxt("results/solution_%s" %filename_orig,save_data,fmt="%s")
+    np.savetxt(pathdir+"results/solution_%s" %filename_orig,save_data,fmt="%s")
     try:
         os.remove(pathdir+filename+"_test")
         os.remove(pathdir+filename+"_train")

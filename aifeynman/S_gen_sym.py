@@ -84,7 +84,7 @@ def check_gen_sym(pathdir,filename,model,gen_sym_idx,express,mu,sigma,nu=10):
         return (0,express,100,100)
 
 
-def do_gen_sym(pathdir, filename, gen_sym_idx,express):
+def do_gen_sym(pathdir, filename, gen_sym_idx,express,og_pathdir=''):
     gen_sym_idx = np.append(gen_sym_idx,-1)
     data_all = np.loadtxt(pathdir+filename)
 
@@ -114,14 +114,14 @@ def do_gen_sym(pathdir, filename, gen_sym_idx,express):
     save_data = data_all
 
     try:
-        os.mkdir("results/gen_sym")
+        os.mkdir(og_pathdir+"results/gen_sym")
     except:
         pass
 
     file_name = filename + "-gen_sym"
-    np.savetxt("results/gen_sym/"+file_name,save_data)
+    np.savetxt(og_pathdir+"results/gen_sym/"+file_name,save_data)
 
-    return ("results/gen_sym/", file_name)
+    return (og_pathdir+"results/gen_sym/", file_name)
 
 def add_gen_sym_on_pareto(PA1,PA, gen_sym_idx, express):
     # Turn the equation from RPN to normal mathematical expression

@@ -16,49 +16,57 @@ from sympy.parsing.sympy_parser import parse_expr
 from .resources import _get_resource
 
 
-def brute_force_comp(pathdir, filename, BF_try_time, BF_ops_file_type, sigma=10, band=0):
+def brute_force_comp(pathdir, filename, BF_try_time, BF_ops_file_type, sigma=10, band=0,
+                     og_pathdir=""):
 
     try_time = BF_try_time
     try_time_prefactor = BF_try_time
     file_type = BF_ops_file_type
 
     try:
-        os.remove("results_comp.dat")
+        os.remove(og_pathdir+"results_comp.dat")
     except:
         pass
 
     try:
-        os.remove("brute_solutions.dat")
+        os.remove(og_pathdir+"brute_solutions.dat")
     except:
         pass
 
     try:
-        os.remove("brute_constant.dat")
+        os.remove(og_pathdir+"brute_constant.dat")
     except:
         pass
 
     try:
-        os.remove("brute_formulas.dat")
+        os.remove(og_pathdir+"brute_formulas.dat")
     except:
         pass
 
     print("Trying to solve mysteries with brute force...")
     print("Trying to solve {}".format(pathdir+filename))
 
-    shutil.copy2(pathdir+filename, "mystery.dat")
+    shutil.copy2(pathdir+filename, og_pathdir+"mystery.dat")
 
-    data = "'{}' '{}' mystery.dat results_comp.dat {:f} {:f}".format(_get_resource(file_type),
-                                                                     _get_resource(
-        "arity2templates.txt"),
-        sigma,
-        band)
+    data = "'{FT}' '{R}' mystery.dat results_comp.dat {SIG} {BND}".format(
+            FT=_get_resource(file_type),
+            R=_get_resource("arity2templates.txt"),
+            SIG=sigma,
+            BND=band
+            )
 
-    with open("args.dat", 'w') as f:
+    arg_file = og_pathdir+'args.dat'
+    print('writing',arg_file)
+    with open(arg_file, 'w') as f:
         f.write(data)
 
+    oldcwd = os.getcwd()
+    os.chdir(og_pathdir)
     try:
         subprocess.call(["feynman_sr_mdl4"], timeout=try_time)
-    except:
+    except Exception as e:
+        print('Error:',e)
         pass
+    os.chdir(oldcwd)
 
     return 1

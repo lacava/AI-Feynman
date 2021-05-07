@@ -40,7 +40,7 @@ def rmse_loss(pred, targ):
     return torch.sqrt(F.mse_loss(pred, targ))/denom
 
 
-def NN_eval(pathdir,filename):
+def NN_eval(pathdir,filename, og_pathdir=''):
     try:
         n_variables = np.loadtxt(pathdir+filename, dtype='str').shape[1]-1
         variables = np.loadtxt(pathdir+filename, usecols=(0,))
@@ -105,7 +105,7 @@ def NN_eval(pathdir,filename):
         else:
             model = SimpleNet(n_variables)
                     
-        model.load_state_dict(torch.load("results/NN_trained_models/models/"+filename+".h5"))
+        model.load_state_dict(torch.load(og_pathdir+"results/NN_trained_models/models/"+filename+".h5"))
         model.eval()
         return(rmse_loss(model(factors_val),product_val),model)
 

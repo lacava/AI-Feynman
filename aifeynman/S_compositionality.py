@@ -69,7 +69,7 @@ def check_compositionality(pathdir,filename,model,express,mu,sigma,nu=10):
         return (0,express,100,100)
 
 
-def do_compositionality(pathdir,filename,express):
+def do_compositionality(pathdir,filename,express,og_pathdir=''):
     data = np.loadtxt(pathdir+filename)
     eq = RPN_to_eq(express)
     # Get the variables appearing in the equation
@@ -87,14 +87,14 @@ def do_compositionality(pathdir,filename,express):
     save_data = np.column_stack((new_data,data[:,-1]))
 
     try:
-        os.mkdir("results/compositionality")
+        os.mkdir(og_pathdir+"results/compositionality")
     except:
         pass
 
     file_name = filename + "-comp"
-    np.savetxt("results/compositionality/"+file_name,save_data)
+    np.savetxt(og_pathdir+"results/compositionality/"+file_name,save_data)
 
-    return ("results/compositionality/", file_name)
+    return (og_pathdir+"results/compositionality/", file_name)
 
 
 def add_comp_on_pareto(PA1,PA,express):

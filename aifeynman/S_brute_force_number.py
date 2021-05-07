@@ -16,31 +16,38 @@ from sympy.parsing.sympy_parser import parse_expr
 from .resources import _get_resource
 
 
-def brute_force_number(pathdir, filename):
+def brute_force_number(pathdir, filename, og_pathdir=''):
     try_time = 2
     file_type = "10ops.txt"
 
     try:
-        os.remove("results.dat")
-        os.remove("brute_solutions.dat")
-        os.remove("brute_formulas.dat")
+        os.remove(og_pathdir+"results.dat")
+        os.remove(og_pathdir+"brute_solutions.dat")
+        os.remove(og_pathdir+"brute_formulas.dat")
     except:
         pass
 
     print("Trying to solve mysteries with brute force...")
     print("Trying to solve {}".format(pathdir+filename))
 
-    shutil.copy2(pathdir+filename, "mystery.dat")
+    shutil.copy2(pathdir+filename, og_pathdir+"mystery.dat")
 
-    data = "'{}' '{}' mystery.dat results.dat".format(_get_resource(file_type),
-                                                      _get_resource("arity2templates.txt"))
+    data = "'{FT}' '{R}' mystery.dat results.dat".format(
+            FT=_get_resource(file_type),
+            R=_get_resource("arity2templates.txt"),
+            )
 
-    with open("args.dat", 'w') as f:
+    arg_file = og_pathdir+'args.dat'
+    print('writing',arg_file)
+    with open(arg_file, 'w') as f:
         f.write(data)
 
+    oldcwd = os.getcwd()
+    os.chdir(og_pathdir)
     try:
         subprocess.call(["feynman_sr1"], timeout=try_time)
     except:
         pass
+    os.chdir(oldcwd)
 
     return 1

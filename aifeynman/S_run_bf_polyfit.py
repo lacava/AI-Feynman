@@ -17,17 +17,20 @@ import os
 from os import path
 
 
-def run_bf_polyfit(pathdir,pathdir_transformed,filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg=3, output_type=""):
+def run_bf_polyfit(pathdir,pathdir_transformed,filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg=3, output_type="", og_pathdir=''):
     input_data = np.loadtxt(pathdir_transformed+filename)
 #############################################################################################################################
     if np.isnan(input_data).any()==False:
         # run BF on the data (+)
         print("Checking for brute force + \n")
-        brute_force(pathdir_transformed,filename,BF_try_time,BF_ops_file_type,"+")
+        print('running brute_force with og_pathdir=',og_pathdir)
+        brute_force(pathdir_transformed,filename,BF_try_time,BF_ops_file_type,"+",
+                og_pathdir=og_pathdir
+                )
 
         try:
             # load the BF output data
-            bf_all_output = np.loadtxt("results.dat", dtype="str")
+            bf_all_output = np.loadtxt(og_pathdir+"results.dat", dtype="str")
             express = bf_all_output[:,2]
             prefactors = bf_all_output[:,1]
             prefactors = [str(i) for i in prefactors]
@@ -101,11 +104,12 @@ def run_bf_polyfit(pathdir,pathdir_transformed,filename,BF_try_time,BF_ops_file_
     #############################################################################################################################
         # run BF on the data (*)
         print("Checking for brute force * \n")
-        brute_force(pathdir_transformed,filename,BF_try_time,BF_ops_file_type,"*")
+        brute_force(pathdir_transformed,filename,BF_try_time,BF_ops_file_type,"*",
+                    og_pathdir=og_pathdir)
 
         try:
             # load the BF output data
-            bf_all_output = np.loadtxt("results.dat", dtype="str")
+            bf_all_output = np.loadtxt(og_pathdir+"results.dat", dtype="str")
             express = bf_all_output[:,2]
             prefactors = bf_all_output[:,1]
             prefactors = [str(i) for i in prefactors]

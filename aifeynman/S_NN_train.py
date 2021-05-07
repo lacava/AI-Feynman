@@ -40,23 +40,29 @@ def rmse_loss(pred, targ):
     denom = torch.sqrt(denom.sum()/len(denom))
     return torch.sqrt(F.mse_loss(pred, targ))/denom
 
-def NN_train(pathdir, filename, epochs=1000, lrs=1e-2, N_red_lr=4, pretrained_path=""):
+def NN_train(pathdir, filename, epochs=1000, lrs=1e-2, N_red_lr=4, pretrained_path="",
+             og_pathdir=''):
     try:
-        os.mkdir("results/NN_trained_models/")
+        os.mkdir(og_pathdir+"results/NN_trained_models/")
     except:
         pass
 
     try:
-        os.mkdir("results/NN_trained_models/models/")
+        os.mkdir(og_pathdir+"results/NN_trained_models/models/")
     except:
         pass
     try:
         n_variables = np.loadtxt(pathdir+"%s" %filename, dtype='str').shape[1]-1
         variables = np.loadtxt(pathdir+"%s" %filename, usecols=(0,))
 
-        epochs = 200*n_variables
+        # epochs = 200*n_variables
         if len(variables)<5000:
+            print('WARNING: tripling the number of epochs')
             epochs = epochs*3
+
+        # WGL
+        print('actual epochs:',epochs)
+        epochs = int(epochs)
 
         if n_variables==0 or n_variables==1:
             return 0
@@ -137,14 +143,14 @@ def NN_train(pathdir, filename, epochs=1000, lrs=1e-2, N_red_lr=4, pretrained_pa
                     if check_es_loss < loss:
                         break
                     else:
-                        torch.save(model_feynman.state_dict(), "results/NN_trained_models/models/" + filename + ".h5")
+                        torch.save(model_feynman.state_dict(), og_pathdir+"results/NN_trained_models/models/" + filename + ".h5")
                         check_es_loss = loss
                 if epoch==0:
                     if check_es_loss < loss:
-                        torch.save(model_feynman.state_dict(), "results/NN_trained_models/models/" + filename + ".h5")
+                        torch.save(model_feynman.state_dict(), og_pathdir+"results/NN_trained_models/models/" + filename + ".h5")
                         check_es_loss = loss
                 '''
-                torch.save(model_feynman.state_dict(), "results/NN_trained_models/models/" + filename + ".h5")   
+                torch.save(model_feynman.state_dict(), og_pathdir+"results/NN_trained_models/models/" + filename + ".h5")   
             lrs = lrs/10
 
         return model_feynman

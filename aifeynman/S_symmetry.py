@@ -41,9 +41,9 @@ def rmse_loss(pred, targ):
     return torch.sqrt(F.mse_loss(pred, targ))/denom
 
 # checks if f(x,y)=f(x-y)
-def check_translational_symmetry_minus(pathdir, filename):
+def check_translational_symmetry_minus(pathdir, filename, og_pathdir=''):
     try:
-        pathdir_weights = "results/NN_trained_models/models/"
+        pathdir_weights = og_pathdir+"results/NN_trained_models/models/"
 
         # load the data
         n_variables = np.loadtxt(pathdir+"/%s" %filename, dtype='str').shape[1]-1
@@ -106,7 +106,7 @@ def check_translational_symmetry_minus(pathdir, filename):
                         mu = torch.mean(torch.log2(1+list_errs*2**30))
                         sigma = torch.std(torch.log2(1+list_errs*2**30))
                         if error<min_error:
-                            min_error = error
+                            min_error = error.cpu()
                             best_i = i
                             best_j = j
                             best_mu = mu
@@ -117,9 +117,9 @@ def check_translational_symmetry_minus(pathdir, filename):
         print(e)
         return (-1,-1,-1,-1,-1)
     
-def do_translational_symmetry_minus(pathdir, filename, i,j):
+def do_translational_symmetry_minus(pathdir, filename, i,j, og_pathdir=''):
     try:
-        pathdir_weights = "results/NN_trained_models/models/"
+        pathdir_weights = og_pathdir+"results/NN_trained_models/models/"
 
         # load the data
         n_variables = np.loadtxt(pathdir+"/%s" %filename, dtype='str').shape[1]-1
@@ -165,12 +165,12 @@ def do_translational_symmetry_minus(pathdir, filename, i,j):
             data_translated =  np.delete(data_translated, j, axis=1)
             data_translated = np.column_stack((data_translated,f_dependent))
             try:
-                os.mkdir("results/translated_data_minus/")
+                os.mkdir(og_pathdir+"results/translated_data_minus/")
             except:
                 pass
-            np.savetxt("results/translated_data_minus/"+file_name , data_translated)
-            remove_input_neuron(model,n_variables,j,ct_median,"results/NN_trained_models/models/"+filename + "-translated_minus_pretrained.h5")
-            return ("results/translated_data_minus/",file_name)
+            np.savetxt(og_pathdir+"results/translated_data_minus/"+file_name , data_translated)
+            remove_input_neuron(model,n_variables,j,ct_median,og_pathdir+"results/NN_trained_models/models/"+filename + "-translated_minus_pretrained.h5")
+            return (og_pathdir+"results/translated_data_minus/",file_name)
 
     except Exception as e:
         print(e)
@@ -178,9 +178,9 @@ def do_translational_symmetry_minus(pathdir, filename, i,j):
         
 
 # checks if f(x,y)=f(x/y)
-def check_translational_symmetry_divide(pathdir, filename):
+def check_translational_symmetry_divide(pathdir, filename, og_pathdir=''):
     try:
-        pathdir_weights = "results/NN_trained_models/models/"
+        pathdir_weights = og_pathdir+"results/NN_trained_models/models/"
 
         # load the data
         n_variables = np.loadtxt(pathdir+"/%s" %filename, dtype='str').shape[1]-1
@@ -243,7 +243,7 @@ def check_translational_symmetry_divide(pathdir, filename):
                         mu = torch.mean(torch.log2(1+list_errs*2**30))
                         sigma = torch.std(torch.log2(1+list_errs*2**30))
                         if error<min_error:
-                            min_error = error
+                            min_error = error.cpu()
                             best_i = i
                             best_j = j
                             best_mu = mu
@@ -255,9 +255,9 @@ def check_translational_symmetry_divide(pathdir, filename):
         return (-1,-1,-1,-1,-1)
     
     
-def do_translational_symmetry_divide(pathdir, filename, i,j):
+def do_translational_symmetry_divide(pathdir, filename, i,j, og_pathdir=''):
     try:
-        pathdir_weights = "results/NN_trained_models/models/"
+        pathdir_weights = og_pathdir+"results/NN_trained_models/models/"
 
         # load the data
         n_variables = np.loadtxt(pathdir+"/%s" %filename, dtype='str').shape[1]-1
@@ -303,21 +303,21 @@ def do_translational_symmetry_divide(pathdir, filename, i,j):
             data_translated =  np.delete(data_translated, j, axis=1)
             data_translated = np.column_stack((data_translated,f_dependent))
             try:
-                os.mkdir("results/translated_data_divide/")
+                os.mkdir(og_pathdir+"results/translated_data_divide/")
             except:
                 pass
-            np.savetxt("results/translated_data_divide/"+file_name , data_translated)
-            remove_input_neuron(model,n_variables,j,ct_median,"results/NN_trained_models/models/"+filename + "-translated_divide_pretrained.h5")
-            return ("results/translated_data_divide/",file_name)
+            np.savetxt(og_pathdir+"results/translated_data_divide/"+file_name , data_translated)
+            remove_input_neuron(model,n_variables,j,ct_median,og_pathdir+"results/NN_trained_models/models/"+filename + "-translated_divide_pretrained.h5")
+            return (og_pathdir+"results/translated_data_divide/",file_name)
 
     except Exception as e:
         print(e)
         return (-1,1)
 
 # checks if f(x,y)=f(x*y)
-def check_translational_symmetry_multiply(pathdir, filename):
+def check_translational_symmetry_multiply(pathdir, filename, og_pathdir=''):
     try:
-        pathdir_weights = "results/NN_trained_models/models/"
+        pathdir_weights = og_pathdir+"results/NN_trained_models/models/"
 
         # load the data
         n_variables = np.loadtxt(pathdir+"/%s" %filename, dtype='str').shape[1]-1
@@ -380,7 +380,7 @@ def check_translational_symmetry_multiply(pathdir, filename):
                         mu = torch.mean(torch.log2(1+list_errs*2**30))
                         sigma = torch.std(torch.log2(1+list_errs*2**30))
                         if error<min_error:
-                            min_error = error
+                            min_error = error.cpu()
                             best_i = i
                             best_j = j
                             best_mu = mu
@@ -391,9 +391,9 @@ def check_translational_symmetry_multiply(pathdir, filename):
         print(e)
         return (-1,-1,-1,-1,-1)
 
-def do_translational_symmetry_multiply(pathdir, filename, i,j):
+def do_translational_symmetry_multiply(pathdir, filename, i,j, og_pathdir=''):
     try:
-        pathdir_weights = "results/NN_trained_models/models/"
+        pathdir_weights = og_pathdir+"results/NN_trained_models/models/"
 
         # load the data
         n_variables = np.loadtxt(pathdir+"/%s" %filename, dtype='str').shape[1]-1
@@ -439,21 +439,21 @@ def do_translational_symmetry_multiply(pathdir, filename, i,j):
             data_translated =  np.delete(data_translated, j, axis=1)
             data_translated = np.column_stack((data_translated,f_dependent))
             try:
-                os.mkdir("results/translated_data_multiply/")
+                os.mkdir(og_pathdir+"results/translated_data_multiply/")
             except:
                 pass
-            np.savetxt("results/translated_data_multiply/"+file_name , data_translated)
-            remove_input_neuron(model,n_variables,j,ct_median,"results/NN_trained_models/models/"+filename + "-translated_multiply_pretrained.h5")
-            return ("results/translated_data_multiply/",file_name)
+            np.savetxt(og_pathdir+"results/translated_data_multiply/"+file_name , data_translated)
+            remove_input_neuron(model,n_variables,j,ct_median,og_pathdir+"results/NN_trained_models/models/"+filename + "-translated_multiply_pretrained.h5")
+            return (og_pathdir+"results/translated_data_multiply/",file_name)
 
     except Exception as e:
         print(e)
         return (-1,1)
 
 # checks if f(x,y)=f(x+y)
-def check_translational_symmetry_plus(pathdir, filename):
+def check_translational_symmetry_plus(pathdir, filename, og_pathdir=''):
     try:
-        pathdir_weights = "results/NN_trained_models/models/"
+        pathdir_weights = og_pathdir+"results/NN_trained_models/models/"
 
         # load the data
         n_variables = np.loadtxt(pathdir+"/%s" %filename, dtype='str').shape[1]-1
@@ -515,7 +515,7 @@ def check_translational_symmetry_plus(pathdir, filename):
                         mu = torch.mean(torch.log2(1+list_errs*2**30))
                         sigma = torch.std(torch.log2(1+list_errs*2**30))
                         if error<min_error:
-                            min_error = error
+                            min_error = error.cpu()
                             best_i = i
                             best_j = j
                             best_mu = mu
@@ -526,9 +526,9 @@ def check_translational_symmetry_plus(pathdir, filename):
         print(e)
         return (-1,-1,-1,-1,-1)
     
-def do_translational_symmetry_plus(pathdir, filename, i,j):
+def do_translational_symmetry_plus(pathdir, filename, i,j, og_pathdir=''):
     try:
-        pathdir_weights = "results/NN_trained_models/models/"
+        pathdir_weights = og_pathdir+"results/NN_trained_models/models/"
 
         # load the data
         n_variables = np.loadtxt(pathdir+"/%s" %filename, dtype='str').shape[1]-1
@@ -574,12 +574,12 @@ def do_translational_symmetry_plus(pathdir, filename, i,j):
             data_translated =  np.delete(data_translated, j, axis=1)
             data_translated = np.column_stack((data_translated,f_dependent))
             try:
-                os.mkdir("results/translated_data_plus/")
+                os.mkdir(og_pathdir+"results/translated_data_plus/")
             except:
                 pass
-            np.savetxt("results/translated_data_plus/"+file_name , data_translated)
-            remove_input_neuron(model,n_variables,j,ct_median,"results/NN_trained_models/models/"+filename + "-translated_plus_pretrained.h5")
-            return ("results/translated_data_plus/", file_name)
+            np.savetxt(og_pathdir+"results/translated_data_plus/"+file_name , data_translated)
+            remove_input_neuron(model,n_variables,j,ct_median,og_pathdir+"results/NN_trained_models/models/"+filename + "-translated_plus_pretrained.h5")
+            return (og_pathdir+"results/translated_data_plus/", file_name)
         
     except Exception as e:
         print(e)

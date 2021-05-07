@@ -10,7 +10,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 is_cuda = torch.cuda.is_available()
 
-def evaluate_derivatives(pathdir,filename,model):
+def evaluate_derivatives(pathdir,filename,model,og_pathdir=''):
     try:
         data = np.loadtxt(pathdir+filename)[:,0:-1]
         pts = np.loadtxt(pathdir+filename)[:,0:-1]
@@ -28,7 +28,8 @@ def evaluate_derivatives(pathdir,filename,model):
         grad = torch.autograd.grad(outs, pts, grad_outputs=grad_weights, create_graph=True)[0]
         save_grads = grad.detach().data.cpu().numpy()
         save_data = np.column_stack((data,save_grads))
-        np.savetxt("results/gradients_comp_%s.txt" %filename,save_data)
+        print('saving',save_data,'to results/gradients_comp_%s.txt' %filename)
+        np.savetxt(og_pathdir+"results/gradients_comp_%s.txt" %filename,save_data)
         return 1
     except:
         return 0

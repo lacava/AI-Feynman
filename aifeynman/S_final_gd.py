@@ -30,13 +30,15 @@ def final_gd(data, math_expr, lr = 1e-2, N_epochs = 5000):
         """Recursively transform each numerical value into a learnable parameter."""
         import sympy
         from sympy import Symbol
-        if isinstance(expr, sympy.numbers.Float) or isinstance(expr, sympy.numbers.Integer) or isinstance(expr, sympy.numbers.Rational) or isinstance(expr, sympy.numbers.Pi):
+        if isinstance(expr, sympy.core.numbers.Float) or isinstance(expr,
+                sympy.core.numbers.Integer) or isinstance(expr,
+                        sympy.core.numbers.Rational) or isinstance(expr, sympy.core.numbers.Pi):
             used_param_names = list(param_dict.keys()) + list(unsnapped_param_dict)
             unsnapped_param_name = get_next_available_key(used_param_names, "p", is_underscore=False)
             unsnapped_param_dict[unsnapped_param_name] = float(expr)
             unsnapped_expr = Symbol(unsnapped_param_name)
             return unsnapped_expr
-        elif isinstance(expr, sympy.symbol.Symbol):
+        elif isinstance(expr, sympy.core.symbol.Symbol):
             return expr
         else:
             unsnapped_sub_expr_list = []

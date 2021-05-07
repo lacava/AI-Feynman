@@ -1,4 +1,5 @@
 from __future__ import print_function
+import sys
 import torch
 import os
 import torch.nn as nn
@@ -13,6 +14,17 @@ from torch.optim.lr_scheduler import CosineAnnealingLR
 from matplotlib import pyplot as plt
 from itertools import combinations
 import time
+
+class __LINE__(object):
+    import sys
+
+    def __repr__(self):
+        try:
+            raise Exception
+        except:
+            return str(sys.exc_info()[2].tb_frame.f_back.f_lineno)
+
+__LINE__ = __LINE__()
 
 is_cuda = torch.cuda.is_available()
 
@@ -38,9 +50,9 @@ def rmse_loss(pred, targ):
     denom = torch.sqrt(denom.sum()/len(denom))
     return torch.sqrt(F.mse_loss(pred, targ))/denom
 
-def check_separability_plus(pathdir, filename):
+def check_separability_plus(pathdir, filename, og_pathdir=''):
     try:
-        pathdir_weights = "results/NN_trained_models/models/"
+        pathdir_weights = og_pathdir+"results/NN_trained_models/models/"
 
         # load the data
         n_variables = np.loadtxt(pathdir+filename, dtype='str').shape[1]-1
@@ -116,7 +128,7 @@ def check_separability_plus(pathdir, filename):
                     sigma = torch.std(torch.log2(1+list_errs*2**30))
                     #error = 2*torch.median(abs(product-sm+model(fact_vary)))
                     if error<min_error:
-                        min_error = error
+                        min_error = error.cpu()
                         best_i = j
                         best_j = rest_indx
                         best_mu = mu
@@ -124,13 +136,13 @@ def check_separability_plus(pathdir, filename):
         return min_error, best_i, best_j, best_mu, best_sigma
                         
     except Exception as e:
-        print(e)
+        print(__file__,__LINE__,e)
         return (-1,-1,-1,-1,-1)                    
                     
                                            
-def do_separability_plus(pathdir, filename, list_i,list_j):
+def do_separability_plus(pathdir, filename, list_i,list_j,og_pathdir=''):
     try:
-        pathdir_weights = "results/NN_trained_models/models/"
+        pathdir_weights = og_pathdir+"results/NN_trained_models/models/"
 
         # load the data
         n_variables = np.loadtxt(pathdir+filename, dtype='str').shape[1]-1
@@ -197,22 +209,22 @@ def do_separability_plus(pathdir, filename, list_i,list_j):
             data_sep_2 = np.delete(data_sep_2,list_i,axis=1)
             data_sep_2 = np.column_stack((data_sep_2,model(fact_vary_rest).cpu()-model(fact_vary).cpu()))
             try:
-                os.mkdir("results/separable_add/")
+                os.mkdir(og_pathdir+"results/separable_add/")
             except:
                 pass
-            np.savetxt("results/separable_add/"+str1,data_sep_1)
-            np.savetxt("results/separable_add/"+str2,data_sep_2)
+            np.savetxt(og_pathdir+"results/separable_add/"+str1,data_sep_1)
+            np.savetxt(og_pathdir+"results/separable_add/"+str2,data_sep_2)
             # if it is separable, return the 2 new files created and the index of the column with the separable variable
-            return ("results/separable_add/",str1,"results/separable_add/",str2)
+            return (og_pathdir+"results/separable_add/",str1,og_pathdir+"results/separable_add/",str2)
 
     except Exception as e:
-        print(e)
+        print(__file__,__LINE__,e)
         return (-1,-1)
 
         
-def check_separability_multiply(pathdir, filename):
+def check_separability_multiply(pathdir, filename,og_pathdir=''):
     try:
-        pathdir_weights = "results/NN_trained_models/models/"
+        pathdir_weights = og_pathdir+"results/NN_trained_models/models/"
 
         # load the data
         n_variables = np.loadtxt(pathdir+filename, dtype='str').shape[1]-1
@@ -293,22 +305,23 @@ def check_separability_multiply(pathdir, filename):
                     mu = torch.mean(torch.log2(1+list_errs*2**30))
                     sigma = torch.std(torch.log2(1+list_errs*2**30))
                     if error<min_error:
-                        min_error = error
+                        min_error = error.cpu()
                         best_i = j
                         best_j = rest_indx
                         best_mu = mu
                         best_sigma = sigma
+
         return min_error, best_i, best_j, best_mu, best_sigma
                     
     except Exception as e:
-        print(e)
+        print(__file__,__LINE__,e)
         return (-1,-1,-1,-1,-1)                         
 
                     
                     
-def do_separability_multiply(pathdir, filename, list_i,list_j):
+def do_separability_multiply(pathdir, filename, list_i,list_j,og_pathdir=''):
     try:
-        pathdir_weights = "results/NN_trained_models/models/"
+        pathdir_weights = og_pathdir+"results/NN_trained_models/models/"
 
         # load the data
         n_variables = np.loadtxt(pathdir+filename, dtype='str').shape[1]-1
@@ -375,16 +388,16 @@ def do_separability_multiply(pathdir, filename, list_i,list_j):
             data_sep_2 = np.delete(data_sep_2,list_i,axis=1)
             data_sep_2 = np.column_stack((data_sep_2,model(fact_vary_rest).cpu()/model(fact_vary).cpu()))
             try:
-                os.mkdir("results/separable_mult/")
+                os.mkdir(og_pathdir+"results/separable_mult/")
             except:
                 pass
-            np.savetxt("results/separable_mult/"+str1,data_sep_1)
-            np.savetxt("results/separable_mult/"+str2,data_sep_2)
+            np.savetxt(og_pathdir+"results/separable_mult/"+str1,data_sep_1)
+            np.savetxt(og_pathdir+"results/separable_mult/"+str2,data_sep_2)
             # if it is separable, return the 2 new files created and the index of the column with the separable variable
-            return ("results/separable_mult/",str1,"results/separable_mult/",str2)
+            return (og_pathdir+"results/separable_mult/",str1,og_pathdir+"results/separable_mult/",str2)
 
     except Exception as e:
-        print(e)
+        print(__file__,__LINE__,e)
         return (-1,-1)
 
         
