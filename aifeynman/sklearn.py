@@ -125,8 +125,13 @@ class AIFeynmanRegressor(RegressorMixin, BaseEstimator):
         #     self.vars_name_ = list(X.columns) + ['target']
         # else:
         #     self.vars_name_ = []
-
-        self._train(data, self.pathdir)
+        try:
+            self._train(data, self.pathdir)
+        except Exception as e:
+            # make sure files get deleted
+            if os.path.exists(self.pathdir):
+                shutil.rmtree(self.pathdir)
+            raise e
 
         self.is_fitted_ = True
         return self
@@ -262,11 +267,6 @@ class AIFeynmanRegressor(RegressorMixin, BaseEstimator):
 
         try:
             shutil.rmtree(self.pathdir)
-            # os.remove(pathdir+self.filename)
-            # os.remove(pathdir+self.filename+"_test")
-            # os.remove(pathdir+self.filename+"_train")
-            # os.remove(self.pathdir+"args.dat")
-            # os.remove(self.pathdir+"mystery.dat")
         except Exception as e:
             print(__file__,__LINE__,e)
             pass
