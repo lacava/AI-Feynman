@@ -130,6 +130,7 @@ class AIFeynmanRegressor(RegressorMixin, BaseEstimator):
         except Exception as e:
             # make sure files get deleted
             if os.path.exists(self.pathdir):
+                print('Except raised during training. Removing',self.pathdir)
                 shutil.rmtree(self.pathdir)
             raise e
 
@@ -303,7 +304,7 @@ class AIFeynmanRegressor(RegressorMixin, BaseEstimator):
             pass
 
         # time limit
-        return PA if self._time_limit() else pass
+        if self._time_limit(): return PA
         # load the data for different checks
         data = np.loadtxt(pathdir+filename)
 
@@ -320,57 +321,57 @@ class AIFeynmanRegressor(RegressorMixin, BaseEstimator):
                         filename, BF_try_time,BF_ops_file_type, PA, polyfit_deg,
                         og_pathdir=self.pathdir
                         )   
-        return PA if self._time_limit() else pass
+        if self._time_limit(): return PA
 
         # Run bf and polyfit on modified output
 
         PA = get_acos(pathdir,self.pathdir+"results/mystery_world_acos/",filename,
                 BF_try_time,BF_ops_file_type, PA, polyfit_deg,
                 og_pathdir=self.pathdir)
-        return PA if self._time_limit() else pass
+        if self._time_limit(): return PA
         print(self.pathdir)
         PA = get_asin(pathdir,self.pathdir+"results/mystery_world_asin/",filename,
                 BF_try_time,BF_ops_file_type, PA, polyfit_deg,
                 og_pathdir=self.pathdir)
-        return PA if self._time_limit() else pass
+        if self._time_limit(): return PA
         print(self.pathdir)
         PA = get_atan(pathdir,self.pathdir+"results/mystery_world_atan/",filename,
                 BF_try_time,BF_ops_file_type, PA, polyfit_deg,
                 og_pathdir=self.pathdir)
-        return PA if self._time_limit() else pass
+        if self._time_limit(): return PA
         print(self.pathdir)
         PA = get_cos(pathdir,self.pathdir+"results/mystery_world_cos/",filename,
                 BF_try_time,BF_ops_file_type, PA, polyfit_deg,
                 og_pathdir=self.pathdir)
-        return PA if self._time_limit() else pass
+        if self._time_limit(): return PA
         PA = get_exp(pathdir,self.pathdir+"results/mystery_world_exp/",filename,
                 BF_try_time,BF_ops_file_type, PA, polyfit_deg,
                 og_pathdir=self.pathdir)
-        return PA if self._time_limit() else pass
+        if self._time_limit(): return PA
         PA = get_inverse(pathdir,self.pathdir+"results/mystery_world_inverse/",filename,
                 BF_try_time,BF_ops_file_type, PA, polyfit_deg,
                 og_pathdir=self.pathdir)
-        return PA if self._time_limit() else pass
+        if self._time_limit(): return PA
         PA = get_log(pathdir,self.pathdir+"results/mystery_world_log/",filename,
                 BF_try_time,BF_ops_file_type, PA, polyfit_deg,
                 og_pathdir=self.pathdir)
-        return PA if self._time_limit() else pass
+        if self._time_limit(): return PA
         PA = get_sin(pathdir,self.pathdir+"results/mystery_world_sin/",filename,
                 BF_try_time,BF_ops_file_type, PA, polyfit_deg,
                 og_pathdir=self.pathdir)
-        return PA if self._time_limit() else pass
+        if self._time_limit(): return PA
         PA = get_sqrt(pathdir,self.pathdir+"results/mystery_world_sqrt/",filename,
                 BF_try_time,BF_ops_file_type, PA, polyfit_deg,
                 og_pathdir=self.pathdir)
-        return PA if self._time_limit() else pass
+        if self._time_limit(): return PA
         PA = get_squared(pathdir,self.pathdir+"results/mystery_world_squared/",
                 filename,BF_try_time,BF_ops_file_type, PA, polyfit_deg,
                 og_pathdir=self.pathdir)
-        return PA if self._time_limit() else pass
+        if self._time_limit(): return PA
         PA = get_tan(pathdir,self.pathdir+"results/mystery_world_tan/",filename,
                 BF_try_time,BF_ops_file_type, PA, polyfit_deg,
                 og_pathdir=self.pathdir)
-        return PA if self._time_limit() else pass
+        if self._time_limit(): return PA
 
     ###########################################################################
         # check if the NN is trained. If it is not, train it on the data.
