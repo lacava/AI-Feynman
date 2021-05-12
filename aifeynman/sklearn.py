@@ -117,7 +117,11 @@ class AIFeynmanRegressor(RegressorMixin, BaseEstimator):
         self.pathdir = (PATHDIR + filehash + '_'
                         + str(np.random.randint(2**15-1)) + '/')
         # update global self.pathdir
-        os.mkdir(self.pathdir)
+        if os.path.exists(self.pathdir):
+            print('WARNING! {} already exists. Training may overwrite '
+                  'files.'.format(self.pathdir))
+        else:
+            os.mkdir(self.pathdir)
         print('self.pathdir:', type(self.pathdir), self.pathdir)
         print('self.filename:', type(self.filename), self.filename)
         
