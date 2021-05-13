@@ -125,7 +125,7 @@ class AIFeynmanRegressor(RegressorMixin, BaseEstimator):
             print('WARNING! {} already exists. Training may overwrite '
                   'files.'.format(self.pathdir))
         else:
-            os.mkdir(self.pathdir)
+            os.makedirs(self.pathdir)
         print('self.pathdir:', type(self.pathdir), self.pathdir)
         print('self.filename:', type(self.filename), self.filename)
         
