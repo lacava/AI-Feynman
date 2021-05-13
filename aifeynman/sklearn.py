@@ -76,7 +76,8 @@ class AIFeynmanRegressor(RegressorMixin, BaseEstimator):
                  NN_epochs=4000,
                  test_percentage=20,
                  random_state=None,
-                 max_time=3600
+                 max_time=3600,
+                 tmp_dir=None
                  ):
 
         self.BF_try_time=BF_try_time 
@@ -86,6 +87,7 @@ class AIFeynmanRegressor(RegressorMixin, BaseEstimator):
         self.test_percentage=test_percentage
         self.random_state=random_state
         self.max_time=max_time
+        self.tmp_dir=tmp_dir
 
     def fit(self, X, y):
         """
@@ -114,6 +116,8 @@ class AIFeynmanRegressor(RegressorMixin, BaseEstimator):
         self.filename = 'tmp_data_' + filehash
 
         self.PA_ = ParetoSet()
+        if self.tmp_dir != None:
+            PATHDIR=self.tmp_dir
         self.pathdir = (PATHDIR + filehash + '_'
                         + str(np.random.randint(2**15-1)) + '/')
         # update global self.pathdir
@@ -691,7 +695,9 @@ class AIFeynmanRegressor(RegressorMixin, BaseEstimator):
                     do_separability_multiply(pathdir,
                                              filename,
                                              separability_multiply_result[1],
-                                             separability_multiply_result[2])
+                                             separability_multiply_result[2],
+                                             og_pathdir=self.pathdir
+                                             )
             PA1_ = ParetoSet()
             PA1 = self._run_AI_all(new_pathdir1,
                              new_filename1,
