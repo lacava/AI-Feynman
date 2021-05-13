@@ -45,7 +45,6 @@ class __LINE__(object):
 
 __LINE__ = __LINE__()
 
-PATHDIR = os.path.dirname(os.path.realpath(__file__))+'/'
 
 PA = ParetoSet()
 
@@ -117,7 +116,9 @@ class AIFeynmanRegressor(RegressorMixin, BaseEstimator):
 
         self.PA_ = ParetoSet()
         if self.tmp_dir != None:
-            PATHDIR=self.tmp_dir
+            PATHDIR = self.tmp_dir
+        else:
+            PATHDIR = os.path.dirname(os.path.realpath(__file__))+'/'
         self.pathdir = (PATHDIR + filehash + '_'
                         + str(np.random.randint(2**15-1)) + '/')
         # update global self.pathdir
