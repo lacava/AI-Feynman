@@ -564,7 +564,9 @@ class AIFeynmanRegressor(RegressorMixin, BaseEstimator):
                                             pathdir,
                                             filename,
                                             symmetry_plus_result[1],
-                                            symmetry_plus_result[2])
+                                            symmetry_plus_result[2],
+                                            og_pathdir=self.pathdir
+                                            )
             PA1_ = ParetoSet()
             PA1 = self._run_AI_all(new_pathdir, new_filename, BF_try_time,
                              BF_ops_file_type,
@@ -635,7 +637,9 @@ class AIFeynmanRegressor(RegressorMixin, BaseEstimator):
                                             pathdir,
                                             filename,
                                             symmetry_divide_result[1],
-                                            symmetry_divide_result[2])
+                                            symmetry_divide_result[2],
+                                            og_pathdir=self.pathdir
+                                            )
             PA1_ = ParetoSet()
             PA1 = self._run_AI_all(new_pathdir,
                              new_filename,
@@ -660,7 +664,9 @@ class AIFeynmanRegressor(RegressorMixin, BaseEstimator):
                     do_separability_plus(pathdir,
                                          filename,
                                          separability_plus_result[1],
-                                         separability_plus_result[2])
+                                         separability_plus_result[2],
+                                         og_pathdir=self.pathdir
+                                         )
             PA1_ = ParetoSet()
             PA1 = self._run_AI_all(new_pathdir1,
                              new_filename1,
