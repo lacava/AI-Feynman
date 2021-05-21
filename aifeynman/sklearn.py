@@ -163,7 +163,11 @@ class AIFeynmanRegressor(RegressorMixin, BaseEstimator):
         return output
 
     def complexity(self):
-        return len(re.split('\(|,',self.best_model_))
+        model_sym = parse_expr(self.best_model_)
+        c=0
+        for arg in preorder_traversal(expr):
+            c += 1
+        return c
 
     def _train(self, input_data, pathdir):
         """adapted from run_aifeynman"""
