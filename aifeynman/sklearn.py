@@ -10,7 +10,7 @@ import re
 from sklearn.base import BaseEstimator, RegressorMixin
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 from sympy.parsing.sympy_parser import parse_expr
-from sympy import Symbol, lambdify, N
+from sympy import Symbol, lambdify, N, preorder_traversal
 
 
 from .dimensionalAnalysis import dimensionalAnalysis
@@ -165,7 +165,7 @@ class AIFeynmanRegressor(RegressorMixin, BaseEstimator):
     def complexity(self):
         model_sym = parse_expr(self.best_model_)
         c=0
-        for arg in preorder_traversal(expr):
+        for arg in preorder_traversal(model_sym):
             c += 1
         return c
 
