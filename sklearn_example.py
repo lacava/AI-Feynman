@@ -12,10 +12,11 @@ assert(X.shape[0] == len(y))
 
 print('init')
 est = AIFeynmanRegressor(
-        BF_try_time=30,
+        BF_try_time=10,
         polyfit_deg=3,
-        NN_epochs=500,
-        max_time=7*60*60
+        NN_epochs=100,
+        # max_time=7*60*60
+        max_time=60
         )
 
 print('fit')

@@ -160,6 +160,9 @@ class AIFeynmanRegressor(RegressorMixin, BaseEstimator):
         X = check_array(X, accept_sparse=True)
         check_is_fitted(self, 'is_fitted_')
         output = self._get_symbolic_expr_output(X, self.best_model_)
+        if isinstance(output, float):
+            output = np.ones(len(X))*output
+        output = np.nan_to_num(output)
         return output
 
     def complexity(self):
